@@ -1,13 +1,13 @@
 'use strict';
 
-module.exports = function (_, passport) {
+module.exports = function (_, passport, User) {
     return {
         SetRouting: function (router) {
             router.get('/', this.indexPage);
             router.get('/signup', this.getSignUp);
             router.get('/home', this.homePage)
 
-            router.post('/signup', this.postSignUp)
+            router.post('/signup', User.SignUpValidation, this.postSignUp)
         },
 
         indexPage: function (req, res) {
@@ -17,7 +17,12 @@ module.exports = function (_, passport) {
         },
 
         getSignUp: function (req, res) {
-            return res.render('signup');
+            const errors = req.flash('error');
+            return res.render('signup', { 
+                title: 'ChatApp | Login', 
+                messages: errors,
+                hasErrors: errors.length > 0 
+            });
         },
 
         postSignUp: passport.authenticate('local.signup', {

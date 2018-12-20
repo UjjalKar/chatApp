@@ -12,11 +12,13 @@ const passport = require('passport');
 
 const container = require('./container');
 
+// last did 26
 
-container.resolve(function(users) {
+container.resolve(function(users, _) {
     mongoose.Promise = global.Promise;
     mongoose.connect('mongodb://localhost/MyChatApppp', {
-        useNewUrlParser: true
+        useNewUrlParser: true,
+        useCreateIndex: true
     });
 
     const app = SetupExpress();
@@ -57,6 +59,11 @@ container.resolve(function(users) {
         
         app.use(passport.initialize());
         app.use(passport.session());
+
+        // Setting _ to global varible 
+        // This is how we set global
+        // Variables in express
+        app.locals._ = _;
     }
 
 });
